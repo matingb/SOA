@@ -36,7 +36,6 @@ const float DISTANCIA_AGUA_SUFICIENTE = 10;
 // -------------------- Variables globales ---------------------
 float temperaturaDeseada;
 float temperaturaActual;
-// int valorLogicoPulsador;
 
 // ------------------- Estados --------------------------------
 enum estados
@@ -51,7 +50,7 @@ enum estados
 enum eventos
 {
     EVENTO_CONTINUE,
-    EVENTO_PRESIONAR_PULSADOR,
+    EVENTO_ON_OFF,
     EVENTO_AGUA_SUFICIENTE,
     EVENTO_AGUA_INSUFICIENTE,
     EVENTO_TEMPERATURA_DESEADA_ALCANZADA,
@@ -60,8 +59,8 @@ enum eventos
     EVENTO_APAGAR
 } eventoNuevo;
 int indiceEvento = 0;
-void (*verificarSensor[4])() = {verificarEstadoPulsador, verificarEstadoSensorDistancia, verificarEstadoSensorPotenciometroYTemperatura, verificarPerdidaTemperatura};
 const int CANTIDAD_EVENTOS_VERIFICAR = 4;
+void (*verificarSensor[CANTIDAD_EVENTOS_VERIFICAR])() = {verificarEstadoSensorPulsador, verificarEstadoSensorDistancia, verificarEstadoSensorPotenciometroYTemperatura, verificarPerdidaTemperatura};
 
 void setup()
 {
@@ -71,7 +70,6 @@ void setup()
 void loop()
 {
     leerEventos();
-    //Serial.println("Estado Actual: " + String(estadoActual) + " - Evento: " + String(eventoNuevo));
     delay(500);
     maquinaDeEstado();
 }
@@ -98,82 +96,105 @@ void maquinaDeEstado ()
         case ESTADO_NO_PREPARADO:
             switch(eventoNuevo)
             {
-                case EVENTO_PRESIONAR_PULSADOR:
+                case EVENTO_ON_OFF:
                     notificarAguaInsuficiente();
                     estadoActual = ESTADO_NO_PREPARADO;
-                    Serial.println("Estado: No preparado, Evento: Encendido agua insuficiente --> ESTADO_NO_PREPARADO"); // log
+                    Serial.println("Estado: No preparado, Evento: Encendido agua insuficiente --> ESTADO_NO_PREPARADO");
                     break;
                 case EVENTO_AGUA_SUFICIENTE:
                     prenderRGBAzul();
                     estadoActual = ESTADO_PREPARADO;
-                    Serial.println("Estado: No preparado, Evento: Agua suficiente --> ESTADO_PREPARADO"); // log
+                    Serial.println("Estado: No preparado, Evento: Agua suficiente --> ESTADO_PREPARADO");
                     break;
-                default: // Si pasa otro evento que no modifica el estado actual
+                case EVENTO_CONTINUE:
+                    Serial.println("Estado: No preparado, Evento: CONTINUE --> ESTADO_NO_PREPARADO");
+                    estadoActual = ESTADO_NO_PREPARADO;
+                    break;
+                default: 
                     break;
             }
             break;
         case ESTADO_PREPARADO:
             switch(eventoNuevo)
             {
-                case EVENTO_PRESIONAR_PULSADOR:
+                case EVENTO_ON_OFF:
                     encenderCalentador();
                     regularIntensidadRGBRojo();
                     estadoActual = ESTADO_CALENTANDO;
-                    Serial.println("Estado: Preparado, Evento: Presionar pulsador --> ESTADO_CALENTANDO"); // log
+                    Serial.println("Estado: Preparado, Evento: Presionar pulsador --> ESTADO_CALENTANDO");
                     break;
                 case EVENTO_AGUA_INSUFICIENTE:
                     apagarRGB();
                     estadoActual = ESTADO_NO_PREPARADO;
-                    Serial.println("Estado: Preparado, Evento: Agua insuficiente --> ESTADO_NO_PREPARADO"); // log
+                    Serial.println("Estado: Preparado, Evento: Agua insuficiente --> ESTADO_NO_PREPARADO");
                     break;
-                default: // Si pasa otro evento que no modifica el estado actual
+                case EVENTO_CONTINUE:
+                    Serial.println("Estado: preparado, Evento: CONTINUE --> ESTADO_PREPARADO");
+                    estadoActual = ESTADO_PREPARADO;
+                    break;
+                default: 
                     break;
             }
             break;
         case ESTADO_CALENTANDO:
             switch(eventoNuevo)
             {
-                case EVENTO_PRESIONAR_PULSADOR:
+                case EVENTO_ON_OFF:
+                    apagarCalentador();
+                    prenderRGBAzul();
+                    estadoActual = ESTADO_PREPARADO;
+                    Serial.println("Estado: Calentando, Evento: Presionar pulsador --> ESTADO_PREPARADO");
+                    break;
+                case EVENTO_AGUA_INSUFICIENTE:
                     apagarCalentador();
                     apagarRGB();
                     estadoActual = ESTADO_NO_PREPARADO;
-                    Serial.println("Estado: Calentando, Evento: Presionar pulsador --> ESTADO_NO_PREPARADO"); // log
+                    Serial.println("Estado: Calentando, Evento: Presionar pulsador --> ESTADO_NO_PREPARADO");
                     break;
                 case EVENTO_CALENTANDO:
                     regularIntensidadRGBRojo();
                     estadoActual = ESTADO_CALENTANDO;
-                    Serial.println("Estado: Calentando, Evento: Calentando --> ESTADO_CALENTANDO"); // log
+                    Serial.println("Estado: Calentando, Evento: Calentando --> ESTADO_CALENTANDO");
                     break;
                 case EVENTO_TEMPERATURA_DESEADA_ALCANZADA:
                     apagarCalentador();
                     prenderRGBVerde();
                     estadoActual = ESTADO_ESPERANDO;
-                    Serial.println("Estado: Calentando, Evento: temperatura deseada --> ESTADO_ESPERANDO"); // log
+                    Serial.println("Estado: Calentando, Evento: temperatura deseada --> ESTADO_ESPERANDO");
                     break;
-                default: // Si pasa otro evento que no modifica el estado actual
+                default: 
                     break;
             }
             break;
         case ESTADO_ESPERANDO:
             switch(eventoNuevo)
             {
-                case EVENTO_PRESIONAR_PULSADOR:
+                case EVENTO_ON_OFF:
                     apagarCalentador();
-                    apagarRGB();
-                    estadoActual = ESTADO_NO_PREPARADO;
-                    Serial.println("Estado: Esperando, Evento: Presionar pulsador --> ESTADO_NO_PREPARADO"); // log
+                    prenderRGBAzul();
+                    estadoActual = ESTADO_PREPARADO;
+                    Serial.println("Estado: Esperando, Evento: Presionar pulsador --> ESTADO_PREPARADO");
                     break;
                 case EVENTO_PERDIDA_TEMPERATURA_DESEADA:
                     encenderCalentador();
                     regularIntensidadRGBRojo();
                     estadoActual = ESTADO_CALENTANDO;
-                    Serial.println("Estado: Esperando, Evento: Temperatura deseada --> ESTADO_CALENTANDO"); // log
+                    Serial.println("Estado: Esperando, Evento: Temperatura deseada --> ESTADO_CALENTANDO");
                     break;
-                default: // Si pasa otro evento que no modifica el estado actual
+                case EVENTO_AGUA_INSUFICIENTE:
+                    apagarCalentador();
+                    apagarRGB();
+					estadoActual = ESTADO_NO_PREPARADO;
+                    break;
+                case EVENTO_CONTINUE:
+                    Serial.println("Estado: Esperando, Evento: CONTINUE --> ESTADO_ESPERANDO");
+                    estadoActual = ESTADO_ESPERANDO;
+                    break;
+                default: 
                     break; 
             }
             break;
-        default: // Manejo de error
+        default: 
             break;
     } 
 }
@@ -181,66 +202,50 @@ void maquinaDeEstado ()
 // ------------------------- Captura de eventos ------------------------------------
 void leerEventos()
 {
-    verificarSensor[indiceEvento]();
-    indiceEvento = ++indiceEvento % CANTIDAD_EVENTOS_VERIFICAR;
+        verificarSensor[indiceEvento]();
+        indiceEvento = ++indiceEvento % CANTIDAD_EVENTOS_VERIFICAR;
 }
 
-void verificarEstadoPulsador()
+void verificarEstadoSensorPulsador()
 {
     int valorLogicoPulsador = digitalRead(PIN_PULSADOR);
-    //Serial.println(valorLogicoPulsador); // Log
 
     if (valorLogicoPulsador == HIGH)
-    {
-        eventoNuevo = EVENTO_PRESIONAR_PULSADOR;
-        //Serial.println("Pulsador presionado"); // Log
-    }
+        eventoNuevo = EVENTO_ON_OFF;
+    else
+        eventoNuevo = EVENTO_CONTINUE;
 }
 
 void verificarEstadoSensorPotenciometroYTemperatura()
 {
     temperaturaDeseada = leerTemperaturaPotenciometro();
     temperaturaActual = leerValorSensorTemperatura();
-    //Serial.println(temperaturaDeseada); // log
-    //Serial.println(temperaturaActual); // log
 
     if (temperaturaActual >= temperaturaDeseada)
-    {
         eventoNuevo = EVENTO_TEMPERATURA_DESEADA_ALCANZADA;
-        //Serial.println("Temperatura deseada"); // log
-    }
     else
-    {
         eventoNuevo = EVENTO_CALENTANDO;
-        //Serial.println("Calentando"); // log
-    }
 }
 
 void verificarEstadoSensorDistancia()
 {
     float distanciaEnCM = calcularDistanciaCM();
-    //Serial.println(distanciaEnCM); // log
 
     if(distanciaEnCM <= DISTANCIA_AGUA_SUFICIENTE)
-    {
         eventoNuevo = EVENTO_AGUA_SUFICIENTE;
-        //Serial.println("Distancia agua suficiente"); // log
-    }
     else
-    {
         eventoNuevo = EVENTO_AGUA_INSUFICIENTE;
-        //Serial.println("Distancia agua no suficiente"); // log
-    }
 }
 
 void verificarPerdidaTemperatura()
 {
     temperaturaDeseada = leerTemperaturaPotenciometro();
     temperaturaActual = leerValorSensorTemperatura();
-    // Serial.println("Actual: " + String(temperaturaActual) + " - Deseada" + String(temperaturaDeseada));
-    // Si la temperatura cae más de un 15% con respecto a la esperada
+
     if (temperaturaActual <= (temperaturaDeseada - (temperaturaDeseada * PORCENTAJE_PERDIDA_TEMPERATURA)))
         eventoNuevo = EVENTO_PERDIDA_TEMPERATURA_DESEADA;
+    else
+        eventoNuevo = EVENTO_CONTINUE;
 }
 
 // ------------- Funciones auxiliares de captura de eventos ----------------------
@@ -248,11 +253,9 @@ float calcularDistanciaCM ()
 {
   digitalWrite(PIN_DISTANCIA_TRIGGER, APAGAR);
   delayMicroseconds(DELAY_LIMPIEZA_SENSOR_DISTANCIA);
-  // Establece el pin de activación en estado ALTO durante 10 microsegundos
   digitalWrite(PIN_DISTANCIA_TRIGGER, ENCENDER);
   delayMicroseconds(DELAY_TRIGGER_SENSOR_DISTANCIA);
   digitalWrite(PIN_DISTANCIA_TRIGGER, APAGAR);
-  // Lee el pin de eco y devuelve el tiempo de viaje de la onda de sonido en microsegundos * 0.01723
   return (pulseIn(PIN_DISTANCIA_ECHO, ENCENDER) * FACTOR_CONVERSION_DISTANCIA_CM);
 }
 
