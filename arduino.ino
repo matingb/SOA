@@ -1,6 +1,6 @@
 // ----------------------- Constantes -----------------------------
 
-// Valores de inicialización 
+// Valores de inicialización
 const int BAUD_RATE = 9600;
 // Valores lógicos pulsador
 const int ENCENDER = HIGH;
@@ -19,11 +19,14 @@ const int PIN_DISTANCIA_TRIGGER = 10;
 const int MIN_VALOR_POTENCIOMETRO = 0;
 const int MAX_VALOR_POTENCIOMETRO = 1023;
 // Valores temperatura
-const int MIN_TEMPERATURA = 0;
-const int MAX_TEMPERATURA = 100;
+const int MIN_TEMPERATURA = 10;
+const int MAX_TEMPERATURA = 99;
 const float FACTOR_ESCALA_TEMPERATURA = 0.49;
 const int PUNTO_REFERENCIA_TEMPERATURA = 50;
 const float PORCENTAJE_PERDIDA_TEMPERATURA = 0.05;
+const int DECENA = 10;
+const float TEMP_INICIAL_POTENCIOMETRO = -1;
+const int CONVERTIR_ASCII_DECIMAL = 48;
 // Valores RGB
 const int RGB_LOW = 0;
 const int RGB_HIGH = 255;
@@ -33,9 +36,15 @@ const int DELAY_TRIGGER_SENSOR_DISTANCIA = 10;
 const float FACTOR_CONVERSION_DISTANCIA_CM = 0.01723;
 const float DISTANCIA_AGUA_SUFICIENTE = 10;
 
+// Senales Bluetooth
+const char BT_ON_OFF = 'O';
+const char BT_TEMP = 'T';
+
 // -------------------- Variables globales ---------------------
-float temperaturaDeseada;
-float temperaturaActual;
+int temperaturaDeseada;
+int temperaturaActual;
+int temperaturaAnteriorPotenciometro;
+int temperaturaActualPotenciometro;
 
 // ------------------- Estados --------------------------------
 enum estados
@@ -59,8 +68,8 @@ enum eventos
     EVENTO_APAGAR
 } eventoNuevo;
 int indiceEvento = 0;
-const int CANTIDAD_EVENTOS_VERIFICAR = 4;
-void (*verificarSensor[CANTIDAD_EVENTOS_VERIFICAR])() = {verificarEstadoSensorPulsador, verificarEstadoSensorDistancia, verificarEstadoSensorPotenciometroYTemperatura, verificarPerdidaTemperatura};
+const int CANTIDAD_EVENTOS_VERIFICAR = 5;
+void (*verificarSensor[CANTIDAD_EVENTOS_VERIFICAR])() = {verificarEstadoSensorPulsador, verificarEstadoSensorDistancia, verificarEstadoSensorPotenciometroYTemperatura, verificarPerdidaTemperatura, verificarSenialBT};
 
 void setup()
 {
@@ -70,7 +79,6 @@ void setup()
 void loop()
 {
     leerEventos();
-    delay(500);
     maquinaDeEstado();
 }
 
@@ -87,6 +95,7 @@ void inicializacion()
     pinMode(PIN_RGB_ROJO, OUTPUT);
     pinMode(PIN_DISTANCIA_TRIGGER, OUTPUT);
   	estadoActual = ESTADO_NO_PREPARADO;
+  	temperaturaAnteriorPotenciometro = TEMP_INICIAL_POTENCIOMETRO;
 }
 
 void maquinaDeEstado ()
@@ -110,7 +119,7 @@ void maquinaDeEstado ()
                     Serial.println("Estado: No preparado, Evento: CONTINUE --> ESTADO_NO_PREPARADO");
                     estadoActual = ESTADO_NO_PREPARADO;
                     break;
-                default: 
+                default:
                     break;
             }
             break;
@@ -132,7 +141,7 @@ void maquinaDeEstado ()
                     Serial.println("Estado: preparado, Evento: CONTINUE --> ESTADO_PREPARADO");
                     estadoActual = ESTADO_PREPARADO;
                     break;
-                default: 
+                default:
                     break;
             }
             break;
@@ -162,7 +171,7 @@ void maquinaDeEstado ()
                     estadoActual = ESTADO_ESPERANDO;
                     Serial.println("Estado: Calentando, Evento: temperatura deseada --> ESTADO_ESPERANDO");
                     break;
-                default: 
+                default:
                     break;
             }
             break;
@@ -190,13 +199,13 @@ void maquinaDeEstado ()
                     Serial.println("Estado: Esperando, Evento: CONTINUE --> ESTADO_ESPERANDO");
                     estadoActual = ESTADO_ESPERANDO;
                     break;
-                default: 
-                    break; 
+                default:
+                    break;
             }
             break;
-        default: 
+        default:
             break;
-    } 
+    }
 }
 
 // ------------------------- Captura de eventos ------------------------------------
@@ -218,9 +227,15 @@ void verificarEstadoSensorPulsador()
 
 void verificarEstadoSensorPotenciometroYTemperatura()
 {
-    temperaturaDeseada = leerTemperaturaPotenciometro();
+    temperaturaActualPotenciometro = leerTemperaturaPotenciometro();
+    if(temperaturaActualPotenciometro != temperaturaAnteriorPotenciometro)
+    {
+        temperaturaDeseada = temperaturaActualPotenciometro;
+        temperaturaAnteriorPotenciometro = temperaturaActualPotenciometro;
+    }
     temperaturaActual = leerValorSensorTemperatura();
-
+	Serial.println(temperaturaDeseada);
+  
     if (temperaturaActual >= temperaturaDeseada)
         eventoNuevo = EVENTO_TEMPERATURA_DESEADA_ALCANZADA;
     else
@@ -230,7 +245,6 @@ void verificarEstadoSensorPotenciometroYTemperatura()
 void verificarEstadoSensorDistancia()
 {
     float distanciaEnCM = calcularDistanciaCM();
-
     if(distanciaEnCM <= DISTANCIA_AGUA_SUFICIENTE)
         eventoNuevo = EVENTO_AGUA_SUFICIENTE;
     else
@@ -239,7 +253,6 @@ void verificarEstadoSensorDistancia()
 
 void verificarPerdidaTemperatura()
 {
-    temperaturaDeseada = leerTemperaturaPotenciometro();
     temperaturaActual = leerValorSensorTemperatura();
 
     if (temperaturaActual <= (temperaturaDeseada - (temperaturaDeseada * PORCENTAJE_PERDIDA_TEMPERATURA)))
@@ -248,7 +261,31 @@ void verificarPerdidaTemperatura()
         eventoNuevo = EVENTO_CONTINUE;
 }
 
+void verificarSenialBT()
+{
+    if (Serial.available() > 0)
+    {
+        char comandoBT = Serial.read();
+
+        switch(comandoBT)
+        {
+            case BT_ON_OFF:
+                eventoNuevo = EVENTO_ON_OFF;
+            break;
+            case BT_TEMP:
+              	temperaturaDeseada = Serial.parseInt();
+              	break;
+            default:
+                eventoNuevo = EVENTO_CONTINUE;
+            break;
+        }
+    }
+    else
+        eventoNuevo = EVENTO_CONTINUE;
+}
+
 // ------------- Funciones auxiliares de captura de eventos ----------------------
+
 float calcularDistanciaCM ()
 {
   digitalWrite(PIN_DISTANCIA_TRIGGER, APAGAR);
@@ -333,5 +370,4 @@ void regularIntensidadRGBRojo()
 void notificarAguaInsuficiente ()
 {
     Serial.println("Agua insuficiente");
-    delayMicroseconds(100);
 }
