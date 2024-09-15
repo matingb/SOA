@@ -1,44 +1,44 @@
 // ----------------------- Constantes -----------------------------
 
 // Valores de inicialización
-const int BAUD_RATE = 9600;
+#define BAUD_RATE 9600
 // Valores lógicos pulsador
-const int ENCENDER = HIGH;
-const int APAGAR = LOW;
+#define ENCENDER HIGH
+#define APAGAR LOW
 // Número de pin
-const int PIN_LAMPARA = 2;
-const int PIN_RGB_ROJO = 3;
-const int PIN_RGB_VERDE = 6;
-const int PIN_RGB_AZUL = 5;
-const int PIN_PULSADOR = 12;
-const int PIN_POTENCIOMETRO = A4;
-const int PIN_SENSOR_TEMPERATURA = A5;
-const int PIN_DISTANCIA_ECHO = 9;
-const int PIN_DISTANCIA_TRIGGER = 10;
+#define PIN_LAMPARA 2
+#define PIN_RGB_ROJO 3
+#define PIN_RGB_VERDE 6
+#define PIN_RGB_AZUL 5
+#define PIN_PULSADOR 12
+#define PIN_POTENCIOMETRO A4
+#define PIN_SENSOR_TEMPERATURA A5
+#define PIN_DISTANCIA_ECHO 9
+#define PIN_DISTANCIA_TRIGGER 10
 // Valores potenciómetro
-const int MIN_VALOR_POTENCIOMETRO = 0;
-const int MAX_VALOR_POTENCIOMETRO = 1023;
+#define MIN_VALOR_POTENCIOMETRO 0
+#define MAX_VALOR_POTENCIOMETRO 1023
 // Valores temperatura
-const int MIN_TEMPERATURA = 10;
-const int MAX_TEMPERATURA = 99;
-const float FACTOR_ESCALA_TEMPERATURA = 0.49;
-const int PUNTO_REFERENCIA_TEMPERATURA = 50;
-const float PORCENTAJE_PERDIDA_TEMPERATURA = 0.05;
-const int DECENA = 10;
-const float TEMP_INICIAL_POTENCIOMETRO = -1;
-const int CONVERTIR_ASCII_DECIMAL = 48;
+#define MIN_TEMPERATURA 10
+#define MAX_TEMPERATURA 99
+#define FACTOR_ESCALA_TEMPERATURA 0.49
+#define PUNTO_REFERENCIA_TEMPERATURA 50
+#define PORCENTAJE_PERDIDA_TEMPERATURA 0.1
+#define DECENA 10
+#define TEMP_INICIAL_POTENCIOMETRO -1
+#define CONVERTIR_ASCII_DECIMAL 48
 // Valores RGB
-const int RGB_LOW = 0;
-const int RGB_HIGH = 255;
+#define RGB_LOW 0
+#define RGB_HIGH 255
 // Valores sensor distancia
-const int DELAY_LIMPIEZA_SENSOR_DISTANCIA = 2;
-const int DELAY_TRIGGER_SENSOR_DISTANCIA = 10;
-const float FACTOR_CONVERSION_DISTANCIA_CM = 0.01723;
-const float DISTANCIA_AGUA_SUFICIENTE = 10;
+#define DELAY_LIMPIEZA_SENSOR_DISTANCIA 2
+#define DELAY_TRIGGER_SENSOR_DISTANCIA 10
+#define FACTOR_CONVERSION_DISTANCIA_CM 0.01723
+#define DISTANCIA_AGUA_SUFICIENTE 10
 
 // Senales Bluetooth
-const char BT_ON_OFF = 'O';
-const char BT_TEMP = 'T';
+#define BT_ON_OFF 'O'
+#define BT_TEMP 'T'
 
 // -------------------- Variables globales ---------------------
 int temperaturaDeseada;
