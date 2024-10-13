@@ -8,10 +8,13 @@
         android:id="@+id/editTextNumberDecimal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="80dp"
         android:ems="10"
-        android:hint="Ingrese temperatura"
+        android:gravity="center"
+        android:hint="Temperatura Deseada"
         android:inputType="numberDecimal"
+        android:textColor="@color/black"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,11 +22,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/button"
-        android:layout_width="175dp"
-        android:layout_height="175dp"
-        android:text="Button"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        app:icon="@drawable/play_button"
+        app:iconSize="75dp"
+        app:iconGravity="textEnd"
+        app:iconTint="@color/white"
         app:cornerRadius="300dp"
-        android:backgroundTint="@color/dark_green"
+        android:text=""
+        android:backgroundTint="@color/verde_boton"
         app:layout_constraintBottom_toTopOf="@+id/container_buttons"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,9 +50,15 @@
         <Button
             android:id="@+id/button_cafe"
             android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:backgroundTint="@color/dark_green"
-            android:text="CAFE" />
+            android:layout_height="85dp"
+            android:backgroundTint="@color/verde_boton"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/cafe"
+            app:iconSize="30dp"
+            app:iconTint="@color/white"
+            android:paddingTop="10dp"
+            android:text="Café"
+            app:iconGravity="top"/>
 
         <Space
             android:layout_width="75dp"
@@ -54,8 +67,15 @@
         <Button
             android:id="@+id/button_mate"
             android:layout_width="100dp"
-            android:layout_height="75dp"
-            android:backgroundTint="@color/dark_green"
-            android:text="MATE" />
+            android:layout_height="85dp"
+            android:backgroundTint="@color/verde_boton"
+            android:textColor="@android:color/white"
+            app:icon="@drawable/mate"
+            app:iconSize="30dp"
+            app:iconTint="@color/white"
+            android:paddingTop="10dp"
+            android:text="Mate"
+            app:iconGravity="top"/>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
