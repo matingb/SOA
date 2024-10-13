@@ -1,11 +1,9 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.SmartBoiler" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-    </style>
+<resources>
 
-    <style name="Theme.SmartBoiler.Splash" parent="Theme.SplashScreen">
+    <style name="Theme.SmartBoiler" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:colorBackground">@color/light_green</item>
         <item name="android:windowSplashScreenBackground">@color/dark_green</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/smart_boiler_logo</item>
-        <item name="android:windowSplashScreenAnimationDuration">2000</item>
-        <item name="android:windowSplashScreenIconBackgroundColor">@android:color/transparent</item>
     </style>
+
 </resources>
