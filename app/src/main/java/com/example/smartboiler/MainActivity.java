@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.second_layout);
+        setContentView(R.layout.activity_main);
 
         splashScreen.setKeepOnScreenCondition(() -> false);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);

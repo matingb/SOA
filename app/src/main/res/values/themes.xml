@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Theme.SmartBoiler" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:colorBackground">@color/verde_claro</item>
+        <item name="android:colorBackground">@color/verde_background</item>
         <item name="android:windowSplashScreenAnimatedIcon">@drawable/smart_boiler_logo</item>
     </style>
 
