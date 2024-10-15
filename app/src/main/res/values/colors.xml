@@ -5,4 +5,6 @@
     <color name="verde_oscuro">#102425</color>
     <color name="verde_boton">#8fc055</color>
     <color name="verde_claro">#c6d6b4</color>
+    <color name="verdeOscuro">#228B22</color>
+    <color name="verdeClaro">#7CFC00</color>
 </resources>
