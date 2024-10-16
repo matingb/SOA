@@ -2,6 +2,7 @@ package com.example.smartboiler;
 
 import static java.lang.Thread.sleep;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.core.splashscreen.SplashScreen;
 import android.content.Context;
@@ -9,7 +10,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
+import android.widget.Button;
 import android.widget.Toast;
 import java.util.Objects;
 
@@ -41,6 +42,14 @@ public class MainActivity extends AppCompatActivity {
         mAccel = 10f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
+
+        Button botonEncender = findViewById(R.id.boton_encender);
+
+        botonEncender.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+            intent.putExtra(SecondActivity.TEMPERATURA_DESEADA, 123);
+            startActivity(intent);
+        });
     }
 
     private final SensorEventListener mSensorListener = new SensorEventListener() {

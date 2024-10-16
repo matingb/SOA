@@ -5,17 +5,17 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageLandscape"
+        android:id="@+id/background_image"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:contentDescription="Imagen de fondo"
         android:scaleType="centerCrop"
         android:src="@drawable/background"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintDimensionRatio="1:1.5" />
+        app:layout_constraintDimensionRatio="1:1.4" />
 
-    <!-- LinearLayout debajo de la imagen -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:gravity="start"
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
-        app:layout_constraintTop_toBottomOf="@+id/imageLandscape"
+        app:layout_constraintTop_toBottomOf="@+id/background_image"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -31,7 +31,7 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Temperatura" />
@@ -42,7 +42,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:max="100"
-            android:progress="50" />
+            android:progress="50"
+            android:progressTint="@color/white"
+            android:thumbTint="@color/white" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,7 +56,7 @@
                 android:id="@+id/radioOption1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="70pt"
+                android:layout_marginEnd="70pt"
                 android:text="Café"
                 android:textColor="@android:color/white" />
 
@@ -73,12 +75,12 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button5"
-                android:layout_width="wrap_content"
+                android:id="@+id/boton_encender"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/verde_boton"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:backgroundTint="@color/verde_boton"
+                android:text="Encender" />
         </LinearLayout>
 
     </LinearLayout>
