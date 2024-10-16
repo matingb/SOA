@@ -4,78 +4,66 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextNumberDecimal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:ems="10"
-        android:gravity="center"
-        android:hint="Temperatura Deseada"
-        android:inputType="numberDecimal"
-        android:textColor="@color/black"
-        android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+    <ImageView
+        android:id="@+id/imageLandscape"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/button"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        app:icon="@drawable/play_button"
-        app:iconSize="75dp"
-        app:iconGravity="textEnd"
-        app:iconTint="@color/white"
-        app:cornerRadius="300dp"
-        android:text=""
-        android:backgroundTint="@color/verde_boton"
-        app:layout_constraintBottom_toTopOf="@+id/container_buttons"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintDimensionRatio="1:1.5" />
 
+    <!-- LinearLayout debajo de la imagen -->
     <LinearLayout
-        android:id="@+id/container_buttons"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="100dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/imageLandscape"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <Button
-            android:id="@+id/button_cafe"
-            android:layout_width="100dp"
-            android:layout_height="85dp"
-            android:backgroundTint="@color/verde_boton"
+        <!-- SeekBar -->
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:max="100"
+            android:progress="50" />
+
+        <!-- TextView -->
+        <TextView
+            android:id="@+id/textStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="7A9B5BTC"
             android:textColor="@android:color/white"
-            app:icon="@drawable/cafe"
-            app:iconSize="30dp"
-            app:iconTint="@color/white"
-            android:paddingTop="10dp"
-            android:text="Café"
-            app:iconGravity="top"/>
+            android:textSize="18sp" />
 
-        <Space
-            android:layout_width="75dp"
-            android:layout_height="wrap_content" />
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <Button
-            android:id="@+id/button_mate"
-            android:layout_width="100dp"
-            android:layout_height="85dp"
-            android:backgroundTint="@color/verde_boton"
-            android:textColor="@android:color/white"
-            app:icon="@drawable/mate"
-            app:iconSize="30dp"
-            app:iconTint="@color/white"
-            android:paddingTop="10dp"
-            android:text="Mate"
-            app:iconGravity="top"/>
+            <RadioButton
+                android:id="@+id/radioOption1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Option 1"
+                android:textColor="@android:color/white" />
+
+            <RadioButton
+                android:id="@+id/radioOption2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Option 2"
+                android:textColor="@android:color/white" />
+        </RadioGroup>
+
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
