@@ -4,13 +4,18 @@ import static java.lang.Thread.sleep;
 
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.splashscreen.SplashScreen;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Objects;
 
@@ -24,14 +29,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
 
-        //solo porque no pude demorar la pantalla de carga, para que
-        // al menos se vea algo lo deje asi a modo de prueba. despues lo borramos
-        try {
-            sleep(2000);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -43,13 +40,54 @@ public class MainActivity extends AppCompatActivity {
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
 
-        Button botonEncender = findViewById(R.id.boton_encender);
+        configurarAccion(
+                findViewById(R.id.accion_encender),
+                R.drawable.custom,
+                "Encender",
+                "50º",
+                v -> {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra(SecondActivity.TEMPERATURA_DESEADA, 50);
+                    startActivity(intent);
+                }
+        );
 
-        botonEncender.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-            intent.putExtra(SecondActivity.TEMPERATURA_DESEADA, 123);
-            startActivity(intent);
-        });
+        configurarAccion(
+                findViewById(R.id.accion_cafe),
+                R.drawable.cafe,
+                "Café",
+                "90º",
+                v -> {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra(SecondActivity.TEMPERATURA_DESEADA, 90);
+                    startActivity(intent);
+                }
+        );
+
+        configurarAccion(
+                findViewById(R.id.accion_mate),
+                R.drawable.mate,
+                "Mate",
+                "75º",
+                v -> {
+                    Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+                    intent.putExtra(SecondActivity.TEMPERATURA_DESEADA, 75);
+                    startActivity(intent);
+                }
+        );
+    }
+
+    private void configurarAccion(ConstraintLayout accionLayout, int iconResId, String texto, String temperatura, View.OnClickListener listener) {
+        ImageView icono = accionLayout.findViewById(R.id.icon);
+        TextView textoView = accionLayout.findViewById(R.id.label);
+        TextView temperaturaView = accionLayout.findViewById(R.id.temperature);
+
+        icono.setImageResource(iconResId);
+        textoView.setText(texto);
+        temperaturaView.setText(temperatura);
+
+        ImageView botonPlay = accionLayout.findViewById(R.id.button);
+        botonPlay.setOnClickListener(listener);
     }
 
     private final SensorEventListener mSensorListener = new SensorEventListener() {
