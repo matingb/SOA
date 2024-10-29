@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">SmartBoiler</string>
     <string name="logo_description">SmartBoiler logo</string>
+    <string name="formato_de_temperatura">%1$dº</string>
 </resources>
