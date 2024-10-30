@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.splashscreen.SplashScreen;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -36,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                temperatureText.setText(getString(R.string.formato_de_temperatura, progress));
+                temperatureText.setText(getString(R.string.formato_accion_temperatura, progress));
             }
 
             @Override
@@ -65,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
         icono.setImageResource(iconResId);
         textoView.setText(texto);
-        temperaturaView.setText(getString(R.string.formato_de_temperatura, temperaturaInicial));
+        temperaturaView.setText(getString(R.string.formato_accion_temperatura, temperaturaInicial));
 
         botonPlay.setOnClickListener(onClickListener);
     }

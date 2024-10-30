@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">SmartBoiler</string>
     <string name="logo_description">SmartBoiler logo</string>
-    <string name="formato_de_temperatura">%1$dº</string>
+    <string name="formato_accion_temperatura">%1$dº</string>
+    <string name="formato_calentando_temperatura_">%1$dº/%2$dº</string>
 </resources>

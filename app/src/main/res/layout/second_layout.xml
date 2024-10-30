@@ -1,61 +1,53 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:layout_editor_absoluteX="-1dp"
-    tools:layout_editor_absoluteY="208dp">
-
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="200dp"
-        android:indeterminate="true"
-        android:progressDrawable="@drawable/circular_progress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/temperatura_actual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1.3"
-        android:textColor="#FFFFFF"
-        android:textSize="48sp"
-        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
-        app:layout_constraintEnd_toEndOf="@+id/progressBar"
-        app:layout_constraintHorizontal_bias="0.503"
-        app:layout_constraintStart_toStartOf="@+id/progressBar"
-        app:layout_constraintTop_toTopOf="@+id/progressBar"
-        app:layout_constraintVertical_bias="0.522" />
-
-    <Button
-        android:id="@+id/boton_apagar"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="20dp"
-        android:backgroundTint="@color/verde_boton"
-        android:text="Apagar"
-        android:textColor="#FFFFFF"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loadingText" />
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/loadingText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:text="Calentando..."
         android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="@+id/progressBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBar" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="16dp"
+        android:indeterminate="true"
+        android:progressDrawable="@drawable/circular_progress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loadingText" />
+
+    <TextView
+        android:id="@+id/temperatura_actual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.3º/50º"
+        android:textColor="#FFFFFF"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+    <Button
+        android:id="@+id/boton_apagar"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/verde_boton"
+        android:textSize="20dp"
+        android:text="Apagar"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/temperatura_actual" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

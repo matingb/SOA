@@ -29,7 +29,7 @@ public class SecondActivity extends AppCompatActivity {
 
         int temperaturaDeseada = getIntent().getIntExtra(TEMPERATURA_DESEADA, 0);
         TextView textView = findViewById(R.id.temperatura_actual);
-        textView.setText(String.valueOf(temperaturaDeseada));
+        textView.setText(getString(R.string.formato_calentando_temperatura_, 10, temperaturaDeseada));
 
         Button botonApagar = findViewById(R.id.boton_apagar);
 
