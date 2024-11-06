@@ -1,17 +1,13 @@
 package com.example.smartboiler;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
 import androidx.core.splashscreen.SplashScreen;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -58,15 +54,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        configurarAccion(R.id.accion_encender, R.drawable.custom, "Encender", seekBar.getProgress(), v -> {
+        configurarAccion(R.id.accion_encender, R.drawable.custom, R.string.accion_nombre_encender, seekBar.getProgress(), v -> {
             int temperaturaSlider = seekBar.getProgress();
             lanzarSegundaActividad(temperaturaSlider);
         });
-        configurarAccion(R.id.accion_cafe, R.drawable.cafe, "Café", TEMPERATURA_CAFE, v -> lanzarSegundaActividad(TEMPERATURA_CAFE));
-        configurarAccion(R.id.accion_mate, R.drawable.mate, "Mate", TEMPERATURA_MATE, v -> lanzarSegundaActividad(TEMPERATURA_MATE));
+        configurarAccion(R.id.accion_cafe, R.drawable.cafe, R.string.accion_nombre_cafe, TEMPERATURA_CAFE, v -> lanzarSegundaActividad(TEMPERATURA_CAFE));
+        configurarAccion(R.id.accion_mate, R.drawable.mate, R.string.accion_nombre_mate, TEMPERATURA_MATE, v -> lanzarSegundaActividad(TEMPERATURA_MATE));
     }
 
-    private void configurarAccion(int accionId, int iconResId, String texto, int temperaturaInicial, View.OnClickListener onClickListener) {
+    private void configurarAccion(int accionId, int iconResId, int texto, int temperaturaInicial, View.OnClickListener onClickListener) {
         ConstraintLayout accionLayout = findViewById(accionId);
         ImageView icono = accionLayout.findViewById(R.id.icon);
         TextView textoView = accionLayout.findViewById(R.id.label);
@@ -74,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         ImageView botonPlay = accionLayout.findViewById(R.id.button);
 
         icono.setImageResource(iconResId);
-        textoView.setText(texto);
+        textoView.setText(getString(texto));
         temperaturaView.setText(getString(R.string.formato_accion_temperatura, temperaturaInicial));
 
         botonPlay.setOnClickListener(onClickListener);

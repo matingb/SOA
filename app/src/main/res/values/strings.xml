@@ -3,4 +3,7 @@
     <string name="logo_description">SmartBoiler logo</string>
     <string name="formato_accion_temperatura">%1$dº</string>
     <string name="formato_calentando_temperatura_">%1$dº/%2$dº</string>
+    <string name="accion_nombre_encender">Encender</string>
+    <string name="accion_nombre_cafe">Café</string>
+    <string name="accion_nombre_mate">Mate</string>
 </resources>
