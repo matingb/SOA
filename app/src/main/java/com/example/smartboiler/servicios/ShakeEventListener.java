@@ -7,16 +7,18 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 
+import com.example.smartboiler.MainActivity;
+
 public class ShakeEventListener implements SensorEventListener {
 
     private float mAccel;
     private float mAccelCurrent;
     private float mAccelLast;
     private final SensorManager mSensorManager;
-    private final Context context;
+    private final Runnable onShakeAction;
 
-    public ShakeEventListener(Context context) {
-        this.context = context;
+    public ShakeEventListener(Context context, Runnable onShakeAction) {
+        this.onShakeAction = onShakeAction;
         mAccel = 10f;
         mAccelCurrent = SensorManager.GRAVITY_EARTH;
         mAccelLast = SensorManager.GRAVITY_EARTH;
@@ -30,6 +32,7 @@ public class ShakeEventListener implements SensorEventListener {
         }
     }
 
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         float x = event.values[0];
@@ -41,7 +44,7 @@ public class ShakeEventListener implements SensorEventListener {
         mAccel = mAccel * 0.9f + delta;
 
         if (mAccel > 12) {
-            Toast.makeText(context, "Shake event detected", Toast.LENGTH_SHORT).show();
+            onShakeAction.run();
         }
     }
 

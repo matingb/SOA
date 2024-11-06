@@ -1,10 +1,8 @@
 package com.example.smartboiler;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.splashscreen.SplashScreen;
 
@@ -23,10 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private static final int TEMPERATURA_MATE = 75;
     private ShakeEventListener shakeEventListener;
 
-
-
-
-    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -85,7 +79,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        shakeEventListener = new ShakeEventListener(this);
+        shakeEventListener = new ShakeEventListener(this, () -> {
+            SeekBar seekBar = findViewById(R.id.seekBar);
+            int temperaturaSlider = seekBar.getProgress();
+            lanzarSegundaActividad(temperaturaSlider);
+        });
     }
 
     @Override

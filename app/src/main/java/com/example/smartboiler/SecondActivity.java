@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.bluetooth.BluetoothDevice;
@@ -18,6 +19,8 @@ import android.bluetooth.BluetoothDevice;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+
+import com.example.smartboiler.servicios.ShakeEventListener;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +47,7 @@ public class SecondActivity extends AppCompatActivity {
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     private static final int REQUEST_BLUETOOTH_PERMISSION = 1;
+    private ShakeEventListener shakeEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +84,8 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
+        shakeEventListener = new ShakeEventListener(this, this::apagar);
         String macAddress = "00:22:06:01:8C:86";
-
         BluetoothDevice device = btAdapter.getRemoteDevice(macAddress);
 
         try {
@@ -102,6 +106,12 @@ public class SecondActivity extends AppCompatActivity {
         mConnectedThread.start();
         mConnectedThread.write(COMANDO_ENCENDER);
         setearTemperaturaDeseada();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        shakeEventListener.unregister();
     }
 
     private void contectarPorBluethoot() throws IOException {
