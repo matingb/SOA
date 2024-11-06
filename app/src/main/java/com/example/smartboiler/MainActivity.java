@@ -1,9 +1,14 @@
 package com.example.smartboiler;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.splashscreen.SplashScreen;
 
 import android.util.Log;
@@ -22,8 +27,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int TEMPERATURA_MATE = 75;
     private ShakeEventListener shakeEventListener;
 
+
+
+
+    @RequiresApi(api = Build.VERSION_CODES.S)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         SplashScreen splashScreen = SplashScreen.installSplashScreen(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
