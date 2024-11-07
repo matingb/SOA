@@ -28,11 +28,11 @@ import java.io.OutputStream;
 import java.util.UUID;
 
 public class SecondActivity extends AppCompatActivity {
-    private final static String COMANDO_ENCENDER = "O";
-    private final static String COMANDO_APAGAR = "O";
+    private final static String COMANDO_ENCENDER = "E";
+    private final static String COMANDO_APAGAR = "A";
     private final static String COMANDO_CAMBIAR_TEMPERATURA_DESEADA = "T";
     private final static String MENSAJE_AGUA_INSUFICIENTE = "Agua insuficiente";
-    private final static String MENSAJE_ON_OFF = "On/Off";
+    private final static String MENSAJE_OFF = "Apagar calendator";
     public static final String TEMPERATURA_DESEADA = "temperatura-deseada";
 
 
@@ -55,16 +55,7 @@ public class SecondActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.second_layout);
 
-        //int temperaturaDeseada = getIntent().getIntExtra(TEMPERATURA_DESEADA, 0);
-        //TextView textView = findViewById(R.id.temperatura_actual);
-        //textView.setText(getString(R.string.formato_calentando_temperatura_, 10, temperaturaDeseada));
-
         Button botonApagar = findViewById(R.id.boton_apagar);
-
-        /*botonApagar.setOnClickListener(v -> {
-            Intent intent = new Intent(SecondActivity.this, MainActivity.class);
-            startActivity(intent);
-        });*/
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         bluetoothIn = Handler_Msg_Hilo_Principal();
@@ -149,10 +140,11 @@ public class SecondActivity extends AppCompatActivity {
                         String dataInPrint = recDataString.substring(0, finDeLinea);
                         TextView textTemperatura = findViewById(R.id.temperatura_actual);
 
-                        if (dataInPrint.equals(MENSAJE_AGUA_INSUFICIENTE) || dataInPrint.equals(MENSAJE_ON_OFF)) {
+                        if (dataInPrint.equals(MENSAJE_AGUA_INSUFICIENTE) || dataInPrint.equals(MENSAJE_OFF)) {
                             apagar();
                         }
-                        textTemperatura.setText(dataInPrint + "°");
+                        else
+                            textTemperatura.setText(dataInPrint + "°");
                         recDataString.delete(0, recDataString.length());
                     }
                 }
