@@ -4,11 +4,13 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -25,6 +27,7 @@ import com.example.smartboiler.servicios.ShakeEventListener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class SecondActivity extends AppCompatActivity {
@@ -53,6 +56,7 @@ public class SecondActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.second_layout);
 
         Button botonApagar = findViewById(R.id.boton_apagar);
@@ -66,11 +70,20 @@ public class SecondActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         try {
-            btSocket.close();
+            if(btSocket != null) {
+                btSocket.close();
+            }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Log.e("ERROR", "Error al cerrar el socket: " + e);
         }
-        mConnectedThread.interrupt();
+
+        try {
+            if(mConnectedThread != null) {
+                mConnectedThread.interrupt();
+            }
+        } catch (RuntimeException e) {
+            Log.e("ERROR", "Error al interrumpir el thread: " + e);
+        }
     }
 
     @Override
@@ -82,22 +95,15 @@ public class SecondActivity extends AppCompatActivity {
 
         try {
             btSocket = crearSocketBluetooth(device);
-        } catch (IOException e) {
-            volverActivityPrincipal();
-            mostrarFalloAlEncender();
-        }
-
-        try {
             contectarPorBluethoot();
+            mConnectedThread = new ConnectedThread(btSocket);
+            mConnectedThread.start();
+            mConnectedThread.write(COMANDO_ENCENDER);
+            setearTemperaturaDeseada();
         } catch (IOException e) {
-            volverActivityPrincipal();
             mostrarFalloAlEncender();
+            volverActivityPrincipal();
         }
-
-        mConnectedThread = new ConnectedThread(btSocket);
-        mConnectedThread.start();
-        mConnectedThread.write(COMANDO_ENCENDER);
-        setearTemperaturaDeseada();
     }
 
     @Override
@@ -107,18 +113,22 @@ public class SecondActivity extends AppCompatActivity {
     }
 
     private void contectarPorBluethoot() throws IOException {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{
-                    android.Manifest.permission.BLUETOOTH_CONNECT,
-                    android.Manifest.permission.BLUETOOTH,
-                    android.Manifest.permission.BLUETOOTH_ADMIN,
-                    android.Manifest.permission.BLUETOOTH_ADVERTISE,
-                    android.Manifest.permission.BLUETOOTH_SCAN,
-                    android.Manifest.permission.ACCESS_COARSE_LOCATION,
+        String[] permisosNecesarios = {
+                android.Manifest.permission.BLUETOOTH_CONNECT,
+                android.Manifest.permission.BLUETOOTH,
+                android.Manifest.permission.BLUETOOTH_ADMIN,
+                android.Manifest.permission.BLUETOOTH_ADVERTISE,
+                android.Manifest.permission.BLUETOOTH_SCAN,
+                android.Manifest.permission.ACCESS_COARSE_LOCATION
+        };
 
-            }, REQUEST_BLUETOOTH_PERMISSION);
-            return;
+        boolean faltaAlgunPermiso = Arrays.stream(permisosNecesarios)
+                .anyMatch(permission -> ActivityCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED);
+
+        if (faltaAlgunPermiso) {
+            ActivityCompat.requestPermissions(this, permisosNecesarios, REQUEST_BLUETOOTH_PERMISSION);
         }
+
         btSocket.connect();
     }
 
@@ -165,13 +175,13 @@ public class SecondActivity extends AppCompatActivity {
 
     private void apagar() {
         volverActivityPrincipal();
-        mConnectedThread.write(COMANDO_APAGAR);
+        if(mConnectedThread != null) {
+            mConnectedThread.write(COMANDO_APAGAR);
+        }
     }
 
-    //private final View.OnClickListener btnApagarListener = v -> apagar();
-
     private void mostrarFalloAlEncender() {
-        mostrarToast("Fallo al encender");
+        mostrarToast("Ocurrio un error al conectarse al dispositivo");
     }
 
     private void mostrarToast(String message) {
