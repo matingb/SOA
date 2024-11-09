@@ -29,6 +29,11 @@
         <activity
             android:name=".SecondActivity"
             android:resizeableActivity="false" />
-
+        <receiver android:name=".BluetoothReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.bluetooth.adapter.action.STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>
