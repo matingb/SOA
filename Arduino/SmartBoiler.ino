@@ -171,7 +171,7 @@ void maquinaDeEstado ()
                 case EVENTO_OFF:
                     apagarCalentador();
                     prenderRGBAzul();
-                    serialBT.println("Apagar calendator");
+                    notificarApagarCalentador();
                     estadoActual = ESTADO_PREPARADO;
                     break;
                 case EVENTO_AGUA_INSUFICIENTE:
@@ -181,10 +181,11 @@ void maquinaDeEstado ()
                     break;
                 case EVENTO_CALENTANDO:
                     regularIntensidadRGBRojo();
-                    serialBT.println(String(temperaturaActual) + "°/" + String(temperaturaDeseada));
+                    notificarTemperaturaActualYDeseada();
                     estadoActual = ESTADO_CALENTANDO;
                     break;
                 case EVENTO_TEMPERATURA_DESEADA_ALCANZADA:
+                    notificarTemperaturaDeseadaAlcanzada();
                     apagarCalentador();
                     prenderRGBVerde();
                     estadoActual = ESTADO_ESPERANDO;
@@ -397,4 +398,19 @@ void regularIntensidadRGBRojo()
 void notificarAguaInsuficiente ()
 {
     serialBT.println("Agua insuficiente");
+}
+
+void notificarApagarCalentador ()
+{
+    serialBT.println("Apagar calendator");
+}
+
+void notificarTemperaturaActualYDeseada ()
+{
+    serialBT.println(String(temperaturaActual) + "°/" + String(temperaturaDeseada));
+}
+
+void notificarTemperaturaDeseadaAlcanzada ()
+{
+    serialBT.println("Temperatura deseada alcanzada");
 }
