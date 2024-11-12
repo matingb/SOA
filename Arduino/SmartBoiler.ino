@@ -1,15 +1,17 @@
 #include <DallasTemperature.h>
 #include <OneWire.h>
 #include <SoftwareSerial.h>
-// ----------------------- Constantes -----------------------------
 
+// ----------------------- Constantes -----------------------------
 #define oneWirePin 12
 
 // Valores de inicialización
 #define BAUD_RATE 9600
+
 // Valores lógicos pulsador
 #define ENCENDER HIGH
 #define APAGAR LOW
+
 // Número de pin
 #define PIN_LAMPARA 7
 #define PIN_RGB_ROJO 6
@@ -22,9 +24,11 @@
 #define PIN_DISTANCIA_TRIGGER 10
 #define PIN_BT_TX 8
 #define PIN_BT_RX 13
+
 // Valores potenciómetro
 #define MIN_VALOR_POTENCIOMETRO 0
 #define MAX_VALOR_POTENCIOMETRO 1023
+
 // Valores temperatura
 #define MIN_TEMPERATURA 10
 #define MAX_TEMPERATURA 99
@@ -35,9 +39,11 @@
 #define TEMP_INICIAL_POTENCIOMETRO -1
 #define CONVERTIR_ASCII_DECIMAL 48
 #define VARIACION_RANGO_TEMPERATURA 1
+
 // Valores RGB
 #define RGB_LOW 0
 #define RGB_HIGH 255
+
 // Valores distancia
 #define DELAY_LIMPIEZA_SENSOR_DISTANCIA 2
 #define DELAY_TRIGGER_SENSOR_DISTANCIA 10
@@ -94,6 +100,7 @@ OneWire oneWireBus(oneWirePin);
 DallasTemperature sensor(&oneWireBus);
 SoftwareSerial serialBT (PIN_BT_TX, PIN_BT_RX);
 
+// ------------------------------------------------------------------
 void setup()
 {
     inicializacion();
@@ -119,8 +126,8 @@ void inicializacion()
     pinMode(PIN_RGB_VERDE, OUTPUT);
     pinMode(PIN_RGB_ROJO, OUTPUT);
     pinMode(PIN_DISTANCIA_TRIGGER, OUTPUT);
-  	estadoActual = ESTADO_NO_PREPARADO;
-  	temperaturaAnteriorPotenciometro = TEMP_INICIAL_POTENCIOMETRO;
+    estadoActual = ESTADO_NO_PREPARADO;
+    temperaturaAnteriorPotenciometro = TEMP_INICIAL_POTENCIOMETRO;
     distanciaActual = DISTANCIA_POR_DEFECTO;
 }
 
@@ -210,7 +217,7 @@ void maquinaDeEstado ()
                 case EVENTO_AGUA_INSUFICIENTE:
                     apagarCalentador();
                     apagarRGB();
-					          estadoActual = ESTADO_NO_PREPARADO;
+		    estadoActual = ESTADO_NO_PREPARADO;
                     break;
                 case EVENTO_CONTINUE:
                     estadoActual = ESTADO_ESPERANDO;
@@ -395,6 +402,7 @@ void regularIntensidadRGBRojo()
     digitalWrite(PIN_RGB_AZUL, RGB_LOW);
 }
 
+//---------------------------- Notificación por Bluetooth --------------------------
 void notificarAguaInsuficiente ()
 {
     serialBT.println("Agua insuficiente");
