@@ -39,6 +39,7 @@
 #define TEMP_INICIAL_POTENCIOMETRO -1
 #define CONVERTIR_ASCII_DECIMAL 48
 #define VARIACION_RANGO_TEMPERATURA 1
+#define INDICE_SENSOR_TEMP_LEER 0
 
 // Valores RGB
 #define RGB_LOW 0
@@ -344,7 +345,7 @@ float convertirValorPotenciometroACelsius(float valor)
 float leerValorSensorTemperatura()
 {
   sensor.requestTemperatures();
-  return sensor.getTempCByIndex(0);
+  return sensor.getTempCByIndex(INDICE_SENSOR_TEMP_LEER);
 }
 
 float convertirValorSensorTemperaturaACelsius(float valorTemp)
