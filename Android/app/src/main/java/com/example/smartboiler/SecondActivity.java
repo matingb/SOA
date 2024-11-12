@@ -149,13 +149,21 @@ public class SecondActivity extends AppCompatActivity {
                         String mensajeRecibido = informacionEmbebido.substring(0, finDeLinea);
                         TextView textTemperatura = findViewById(R.id.temperatura_actual);
 
-                        if(mensajeRecibido.equals(MENSAJE_AGUA_INSUFICIENTE) || mensajeRecibido.equals(MENSAJE_OFF)) {
-                            apagar();
-                        } else if(mensajeRecibido.equals(MENSAJE_TEMPERATURA_ALCANZADA)){
-                            mostrarToast("Agua lista");
-                            apagar();
-                        } else {
-                            textTemperatura.setText(mensajeRecibido + "°");
+                        switch(mensajeRecibido){
+                            case MENSAJE_AGUA_INSUFICIENTE:
+                                mostrarToast("Agua insuficiente");
+                                apagar();
+                                break;
+                            case MENSAJE_OFF:
+                                apagar();
+                                break;
+                            case MENSAJE_TEMPERATURA_ALCANZADA:
+                                mostrarToast("Agua lista");
+                                volverActivityPrincipal();
+                                break;
+                            default:
+                                textTemperatura.setText(mensajeRecibido + "°");
+                                break;
                         }
                         informacionEmbebido.delete(0, informacionEmbebido.length());
                     }
