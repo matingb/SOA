@@ -5,7 +5,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -18,14 +17,14 @@ public class ShakeEventListener implements SensorEventListener {
     private final SensorManager sensorManager;
     private final Runnable onShakeAction;
     private LocalDateTime fechaUltimoShake = LocalDateTime.now();
-    private final float valorPartidaAcelFilt = 10f;
-    private final float factorSuavizadoFiltro = 0.9f;
-    private final float umbralAceleracionMinima = 12;
-    private final long tiempoMiminoDeteccionShake = 2;
+    private final float VALOR_PARTIDA_ACELERACION_FILTRADA = 10f;
+    private final float FACTOR_SUAVIZADOR_FILTRO = 0.9f;
+    private final float UMBRAL_ACELERACION_MINIMA = 12;
+    private final long TIEMPO_MINIMO_ENTRE_SHAKES = 2;
 
     public ShakeEventListener(Context context, Runnable onShakeAction) {
         this.onShakeAction = onShakeAction;
-        aceleracionFiltrada = valorPartidaAcelFilt;
+        aceleracionFiltrada = VALOR_PARTIDA_ACELERACION_FILTRADA;
         aceleracionTotal = SensorManager.GRAVITY_EARTH;
         aceleracionAnterior = SensorManager.GRAVITY_EARTH;
 
@@ -46,11 +45,11 @@ public class ShakeEventListener implements SensorEventListener {
         aceleracionAnterior = aceleracionTotal;
         aceleracionTotal = (float) Math.sqrt((x * x + y * y + z * z));
         float diferenciaAceleraciones = aceleracionTotal - aceleracionAnterior;
-        aceleracionFiltrada = aceleracionFiltrada * factorSuavizadoFiltro + diferenciaAceleraciones;
+        aceleracionFiltrada = aceleracionFiltrada * FACTOR_SUAVIZADOR_FILTRO + diferenciaAceleraciones;
 
         long diferenciaSegundos = Duration.between(fechaUltimoShake, LocalDateTime.now()).getSeconds();
 
-        if (aceleracionFiltrada > umbralAceleracionMinima && diferenciaSegundos >= tiempoMiminoDeteccionShake) {
+        if (aceleracionFiltrada > UMBRAL_ACELERACION_MINIMA && diferenciaSegundos >= TIEMPO_MINIMO_ENTRE_SHAKES) {
             onShakeAction.run();
         }
     }

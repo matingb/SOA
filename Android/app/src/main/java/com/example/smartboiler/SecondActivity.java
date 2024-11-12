@@ -35,8 +35,8 @@ public class SecondActivity extends AppCompatActivity {
     private final static String MENSAJE_AGUA_INSUFICIENTE = "Agua insuficiente";
     private final static String MENSAJE_OFF = "Apagar calendator";
     private final static String MENSAJE_TEMPERATURA_ALCANZADA = "Temperatura deseada alcanzada";
+    private final static int BYTES_MINIMO_MENSAJE = 0;
     public static final String TEMPERATURA_DESEADA = "temperatura-deseada";
-    private final static int bytesMinimoMensajes = 0;
 
     Handler handlerBluetoothEmbebido;
     final int handlerState = 0;
@@ -145,7 +145,7 @@ public class SecondActivity extends AppCompatActivity {
                     informacionEmbebido.append(mensaje);
                     int finDeLinea = informacionEmbebido.indexOf("\r\n");
 
-                    if (finDeLinea > bytesMinimoMensajes) {
+                    if (finDeLinea > BYTES_MINIMO_MENSAJE) {
                         String mensajeRecibido = informacionEmbebido.substring(0, finDeLinea);
                         TextView textTemperatura = findViewById(R.id.temperatura_actual);
 

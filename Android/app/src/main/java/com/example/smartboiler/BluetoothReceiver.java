@@ -1,6 +1,5 @@
 package com.example.smartboiler;
 
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
